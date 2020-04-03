@@ -6,8 +6,7 @@ import re
 
 sites = ["lichess.org", "chess24.com", "chessbomb.com", "chess.com", "chesstempo.com", "chessable.com", "chessgames.com", "blitztactics.com"]
 
-xpath = '''/html/body/div[1]/div/section/div/section/div[1]/div[2]/div[3]/div/div[1]/section[2]/div[3]/div[2]/div[3]/div[2]/div[1]'''
-#old xpath '''//*[@id="traffic-rank-content"]/div/span[2]/div[1]/span/span/div/strong/text()'''
+xpath = '''/html/body/div/div/section/div/section/div[1]/div[2]/div[3]/div/div[5]/section/div[1]/section[2]/div[2]/div[1]/div[2]/p[1]'''
 
 alexapage = "https://www.alexa.com/siteinfo/"
 
@@ -15,6 +14,10 @@ output = []
 for site in sites:
     pageContent=requests.get(alexapage + site)
     tree = html.fromstring(pageContent.content)
-    rank = re.sub("\D", "", str(html.tostring(tree.xpath(xpath)[0])))
-    output.append(f"popularity,website={site} rank={rank}")
+    try:
+        rank = re.sub("\D", "", str(html.tostring(tree.xpath(xpath)[0])))
+        print(rank)
+        output.append(f"popularity,website={site} rank={rank}")
+    except IndexError:
+        continue
 print("\n".join(output))
