@@ -16,7 +16,6 @@ for site in sites:
     tree = html.fromstring(pageContent.content)
     try:
         rank = re.sub("\D", "", str(html.tostring(tree.xpath(xpath)[0])))
-        print(rank)
         output.append(f"popularity,website={site} rank={rank}")
     except IndexError:
         continue
